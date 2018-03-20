@@ -12,3 +12,8 @@ npm run build
 
 # run all tests
 npm test
+
+
+Only mock api and mock users
+admin/3333
+johndoe/1111
