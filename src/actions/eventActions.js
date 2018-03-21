@@ -39,8 +39,9 @@ export function saveEvent(event){
 export function deleteEvent(eventId){
   return function(dispatch){
     dispatch(beginAjaxCall());
-    return eventApi.deleteEvent(event).then(eventId =>{
-      dispatch(deleteEventSuccess(eventId));
+    return eventApi.deleteEvent(eventId).then(deletedEventId =>{
+      console.log('Event Actions eventid: ' + deletedEventId);
+      dispatch(deleteEventSuccess(deletedEventId));
     }).catch(error =>{
       dispatch(ajaxCallError(error));
       throw(error);

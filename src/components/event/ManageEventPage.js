@@ -56,7 +56,7 @@ class ManageEventPage extends React.Component{
     if(!this.eventFormIsValid()){
       return;
     }
-    this.setState({saving: true, isDirty: false});
+    this.setState({inProgress: true, isDirty: false});
     let runningEvent = this.state.trailEvent;
     runningEvent['division'] = this.state.trailEvent.division.split(',');
     runningEvent['distance'] = this.state.trailEvent.distance.split(',');
@@ -66,25 +66,27 @@ class ManageEventPage extends React.Component{
       then(() => this.redirect('Saved successfully'))
       .catch(error => {
         toastr.error(error);
-        this.setState({saving: false});
+        this.setState({inProgress: false});
       });
 
   }
   deleteTrailEvent(event){
-    console.log('deleteCourse');
+    console.log('deleteTrailEvent');
     event.preventDefault();
-    this.setState({saving: true});
-    this.props.actions.deleteCourse(this.state.course).
-      then(() => this.redirect('Deleted successfully'))
+    this.setState({inProgress: true});
+    const eventId = this.state.trailEvent.id;
+    this.props.actions.deleteEvent(eventId).
+      then(() => this.redirect('Event has been removed successfully'))
       .catch(error => {
-        toastr.error('DeleteCourse error:' + error);
-        this.setState({saving: false});
+        console.log(error);
+        toastr.error('Deleting trail event ends with error');
+        this.setState({inProgress: false});
       });
   }
 
   redirect(message) {
     console.log('Redirecting....');
-    this.setState({saving: false});
+    this.setState({inProgress: false});
     toastr.success(message);
 
     this.context.router.push('/events');
@@ -111,11 +113,11 @@ ManageEventPage.contextTypes = {
 };
 function getEventById(events, id){
   const trailEvent = events.filter(trailEvent => trailEvent.id == id);
-
+  let modified = { id: 0, name: '', www: '', date: '', location: '', available: '0', division: '', distance: '', fee: '' };
   // filter returns always an array
-  if(trailEvent){
+  if(trailEvent && trailEvent[0]!= undefined){
     let event = trailEvent[0];
-    let modified = {id: event.id,
+      return {id: event.id,
       name: event.name,
       www: event.www,
       date: event.date,
@@ -125,31 +127,18 @@ function getEventById(events, id){
       distance: event.distance.join(","),
       fee: event.fee
     };
-    return modified;
   }
 
-  return {id: 0,
-    name: '',
-    www: '',
-    date: '',
-    location: '',
-    available: '',
-    division: '',
-    distance: '',
-    fee: ''
-  };
+  return modified;
 }
 function mapStateToProps(state, ownProps){
+  console.log('Entering mapStateToProps');
   const trailEventId = ownProps.params.id;
 
-  let event = { id: 0, name: '', www: '', date: '', location: '', available: 0, division: '', distance: '', fee: '' };
-
+  let event = { id: 0, name: '', www: '', date: '', location: '', available: '0', division: '', distance: '', fee: '' };
+   console.log('Entering mapStateToProps ownProps eventid: ' + trailEventId);
   if(trailEventId && state.events.length > 0){
     event = getEventById(state.events, trailEventId);
-    if(event == undefined){
-
-      event = { id: 0, name: '', www: '', date: '', location: '', available: 0, division: '', distance: '', fee: '' };
-    }
   }
   console.log('mapStateToProps event: '+ Object.values(event));
   return {

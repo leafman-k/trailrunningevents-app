@@ -15,6 +15,11 @@ export default function eventReducer(state = initialState.events, action){
         ...state,
         Object.assign({}, action.course)
       ];
+    case types.DELETE_EVENT_SUCCESS:
+      console.log('Event reducer eventid: ' + action.eventId);
+      return [
+        ...state.filter(event => event.id != action.eventId)
+      ];
     default:
       return state;
   }

@@ -158,5 +158,15 @@ class EventApi {
       }, delay);
     });
   }
+  static deleteEvent(eventId) {
+    return new Promise((resolve, reject) => {
+      const indexOfCourseToDelete = events.findIndex(event => {
+          event.id == eventId;
+        });
+        console.log('Event api: Deleted event by id: ' + eventId);
+        events.splice(indexOfCourseToDelete, 1);
+        resolve(eventId);
+    });
+  }
 }
 export default EventApi;

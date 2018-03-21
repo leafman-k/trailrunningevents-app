@@ -7,7 +7,7 @@ const EventTableRow = ({event, onDelete}) => {
       <td><Link to={'/event/' + event.id}> {event.name}</Link></td>
       <td>{event.location}</td>
       <td>{event.date}</td>
-      <td><button onClick={onDelete} data-id={event.eventId} className="btn btn-default glyphicon glyphicon-trash"></button></td>
+      <td><button onClick={onDelete} data-id={event.id} className="btn btn-default glyphicon glyphicon-trash"></button></td>
     </tr>
   );
 };

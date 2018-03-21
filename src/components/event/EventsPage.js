@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as eventActions from '../../actions/eventActions';
 import {browserHistory} from 'react-router';
 import EventTable from './EventTable';
-
+import toastr from 'toastr';
 
 class EventsPage extends React.Component{
 
@@ -17,6 +17,13 @@ class EventsPage extends React.Component{
       browserHistory.push('/event');
   }
   deleteTrailEvent(event){
+    const eventId = event.currentTarget.dataset.id;
+    console.log('EventsPage eventid: ' + eventId);
+    this.props.actions.deleteEvent(eventId).then(() => {
+      toastr.success('Event has been removed successfully');
+    }).catch(error => {
+      toastr.error(error);
+    });
 
   }
   render(){
@@ -34,7 +41,8 @@ class EventsPage extends React.Component{
   }
 }
 EventsPage.propTypes = {
-  events: PropTypes.array.isRequired
+  events: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownPros){
