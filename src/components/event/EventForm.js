@@ -5,7 +5,7 @@ import SelectInput from '../common/SelectInput';
 const EventForm = ({trailEvent, onChange, onSave, onDelete, inProgress, errors}) => {
 
   return (
-    <form>
+    <form onSubmit={onSave}>
       <h1>Manage Trail Event</h1>
       <TextInput
         name="name"
@@ -69,7 +69,7 @@ const EventForm = ({trailEvent, onChange, onSave, onDelete, inProgress, errors})
         disabled={inProgress}
         value={inProgress ? 'Saving...' : 'Save'}
         className="btn btn-primary"
-        onClick={onSave}/>
+        />
       <input
         name="deletebutton"
         type="submit"

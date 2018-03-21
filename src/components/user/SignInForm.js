@@ -7,6 +7,7 @@ const SignInForm = ({credentials, errors, onChange, onSignIn, inProgress}) => {
   return (
     <div>
       <h1>Welcome to </h1>
+      <form onSubmit={onSignIn}>
       <TextInput
           name="userName"
           label="User Name"
@@ -27,7 +28,8 @@ const SignInForm = ({credentials, errors, onChange, onSignIn, inProgress}) => {
           disabled={inProgress}
           value={inProgress ? 'Signing in...' : 'Sign In'}
           className="btn btn-primary"
-          onClick={onSignIn}/>
+        />
+      </form>
       </div>
   );
 

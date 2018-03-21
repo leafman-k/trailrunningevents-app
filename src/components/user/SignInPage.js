@@ -27,7 +27,9 @@ class SignInPage extends React.Component{
    this.setState({isDirty: true});
    return this.setState({credentials: credentials});
   }
-  signIn() {
+  signIn(event) {
+    event.preventDefault();
+    console.log('signIn hopefully');
     this.props.actions.signIn(this.state.credentials).
       then(() => this.redirect())
       .catch(error => {
