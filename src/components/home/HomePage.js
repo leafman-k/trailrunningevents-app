@@ -9,17 +9,19 @@ const MAX_ON_PAGE = 6;
 class HomePage extends React.Component{
   constructor(props, context) {
     super(props, context);
+    console.log('Entering mapStateToProps ....');
     this.state ={
       events: props.events,
-      currentPage: 0,
-      numOfPages: 0,
-      eventsOnPage: []
+      currentPage: 1,
+      numOfPages: this.countNumOfPages(props.events.length),
+      eventsOnPage: this.getEventsToTable(1, props.events)
     };
     this.setCurrentPage = this.setCurrentPage.bind(this);
     this.setNextPage = this.setNextPage.bind(this);
     this.setPreviousPage = this.setPreviousPage.bind(this);
   }
   componentWillReceiveProps(nextProps){
+    console.log('Entering mapStateToProps ....');
     if(this.props != nextProps){
       this.setState({events: nextProps.events});
       const numOfPages = this.countNumOfPages(nextProps.events.length);
@@ -90,6 +92,7 @@ HomePage.propTypes ={
   events: PropTypes.array.isRequired
 };
 function mapStateToProps(state, ownProps){
+  console.log('Entering mapStateToProps ....');
   return {
     events: state.events
   };
