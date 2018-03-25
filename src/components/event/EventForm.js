@@ -1,8 +1,10 @@
 import React from 'react';
 import TextInput from '../common/TextInput';
 import SelectInput from '../common/SelectInput';
-
-const EventForm = ({trailEvent, onChange, onSave, onDelete, inProgress, errors}) => {
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
+const EventForm = ({trailEvent, startDate, onChange, onDateChange, onSave, onDelete, inProgress, errors}) => {
 
   return (
     <form onSubmit={onSave}>
@@ -21,13 +23,18 @@ const EventForm = ({trailEvent, onChange, onSave, onDelete, inProgress, errors})
         placeholder="www"
         onChange={onChange}
         error={errors.www}/>
-      <TextInput
-        name="date"
-        label="Date"
-        value={trailEvent.date}
-        placeholder="Date"
-        onChange={onChange}
-        error={errors.date}/>
+      <div className="form-group">
+          <label htmlFor="date">Date</label>
+          <div className="field">
+     <DatePicker
+              name="date"
+              selected={startDate}
+              className="form-control"
+              onChange={onDateChange}
+              locale="fi"
+          />
+      </div>
+    </div>
      <TextInput
         name="location"
         label="Location"
@@ -82,9 +89,11 @@ const EventForm = ({trailEvent, onChange, onSave, onDelete, inProgress, errors})
 };
 EventForm.propTypes = {
   trailEvent: React.PropTypes.object,
+  startDate: React.PropTypes.object,
   onSave: React.PropTypes.func.isRequired,
   onDelete: React.PropTypes.func.isRequired,
   onChange: React.PropTypes.func.isRequired,
+  onDateChange: React.PropTypes.func.isRequired,
   inProgress: React.PropTypes.bool,
   errors: React.PropTypes.object
 };

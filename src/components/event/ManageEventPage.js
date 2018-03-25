@@ -5,18 +5,20 @@ import * as eventActions from '../../actions/eventActions';
 import EventForm from './EventForm';
 import toastr from 'toastr';
 import { withRouter } from 'react-router';
-
+import moment from 'moment';
 class ManageEventPage extends React.Component{
 
   constructor(props, context){
     super(props, context);
     this.state = {
       trailEvent: Object.assign({}, this.props.event),
+      startDate: moment(),
       errors: {},
       inProgress: false,
       isDirty: false
     };
     this.updateTrailEventState = this.updateTrailEventState.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
     this.saveTrailEvent = this.saveTrailEvent.bind(this);
     this.deleteTrailEvent = this.deleteTrailEvent.bind(this);
     }
@@ -39,6 +41,12 @@ class ManageEventPage extends React.Component{
     runningEvent[field] = event.target.value;
     this.setState({isDirty: true});
     return this.setState({trailEvent: runningEvent});
+  }
+  handleDateChange(date){
+    console.log(moment(date).format('DD.MM.YYYY'));
+    let runningEvent = this.state.trailEvent;
+    runningEvent[date] = moment(date).format('DD.MM.YYYY');
+    this.setState({startDate: date});
   }
   eventFormIsValid(){
 
@@ -95,7 +103,9 @@ class ManageEventPage extends React.Component{
     return (
         <EventForm
           trailEvent={this.state.trailEvent}
+          startDate={this.state.startDate}
           onChange={this.updateTrailEventState}
+          onDateChange={this.handleDateChange}
           onSave={this.saveTrailEvent}
           onDelete={this.deleteTrailEvent}
           errors={this.state.errors}
