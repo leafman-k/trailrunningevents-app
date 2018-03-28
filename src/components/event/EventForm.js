@@ -33,6 +33,7 @@ const EventForm = ({trailEvent, startDate, onChange, onDateChange, onSave, onDel
               onChange={onDateChange}
               locale="fi"
           />
+        {errors.date && <div className="alert alert-danger">{errors.date}</div>}
       </div>
     </div>
      <TextInput

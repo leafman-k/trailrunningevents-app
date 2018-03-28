@@ -33,8 +33,6 @@ class ManageEventPage extends React.Component{
     }
   }
 
-
-
   updateTrailEventState(event) {
     const field = event.target.name;
     let runningEvent = this.state.trailEvent;
@@ -45,29 +43,85 @@ class ManageEventPage extends React.Component{
   handleDateChange(date){
     console.log(moment(date).format('DD.MM.YYYY'));
     let runningEvent = this.state.trailEvent;
-    runningEvent[date] = moment(date).format('DD.MM.YYYY');
-    this.setState({startDate: date});
+    runningEvent['date'] = moment(date).format('DD.MM.YYYY');
+    console.log("Date: " + runningEvent['date']);
+    this.setState({trailEvent: runningEvent});
+    this.setState({startDate: date, trailEvent: runningEvent});
   }
   eventFormIsValid(){
 
     let formsIsValid = true;
     let errors = {};
-    if(this.state.trailEvent.name.length < 5){
-      errors.name = 'Title must be at least 5 characters.';
-      formsIsValid = false;
+    for(let key in this.state.trailEvent){
+      switch(key){
+        case 'name':
+          if(this.state.trailEvent[key].length < 5){
+            errors.name = 'Name must be at least 5 characters.';
+            formsIsValid = false;
+          }
+          break;
+        case 'www':
+          if(this.state.trailEvent[key].length < 5){
+            errors.www = 'Url must be at least 5 characters.';
+            formsIsValid = false;
+          }
+          break;
+        case 'date':
+          if(this.state.trailEvent[key].length < 8){
+            errors.date = 'Invalid date';
+            formsIsValid = false;
+          }
+          break;
+        case 'location':
+          if(this.state.trailEvent[key].length < 5){
+            errors.location = 'Invalid location';
+            formsIsValid = false;
+            }
+          break;
+        case 'available':
+          if(this.state.trailEvent[key].length < 1){
+            errors.available = 'Available spots cannot be empty';
+            formsIsValid = false;
+          }
+          break;
+        case 'division':
+          if(this.state.trailEvent[key].length < 2){
+            errors.division = 'Division cannot be empty';
+            formsIsValid = false;
+          }
+          break;
+        case 'distance':
+          if(this.state.trailEvent[key].length < 1){
+            errors.distance = 'Distance cannot be empty';
+            formsIsValid = false;
+          }
+          break;
+        case 'fee':
+            if(this.state.trailEvent[key].length < 1){
+              errors.fee = 'Fee cannot be empty';
+              formsIsValid = false;
+            }
+            break;
+        default:
+            break;
+      }
     }
+
     this.setState({errors: errors});
+    console.log("Form validation result: " + formsIsValid + JSON.stringify(errors));
     return formsIsValid;
   }
   saveTrailEvent(event) {
     event.preventDefault();
     if(!this.eventFormIsValid()){
+      console.log('Invalid form');
       return;
     }
     this.setState({inProgress: true, isDirty: false});
     let runningEvent = this.state.trailEvent;
     runningEvent['division'] = this.state.trailEvent.division.split(',');
     runningEvent['distance'] = this.state.trailEvent.distance.split(',');
+
 
 
     this.props.actions.saveEvent(runningEvent).
